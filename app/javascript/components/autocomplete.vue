@@ -11,14 +11,14 @@
       <span>Found {{ count }} result(s)</span>
     </div>
     <ul>
-      <li v-for="result in results">
-        {{ result }}
-      </li>
+      <list-item v-for="result in results" :item="result" :key="result"></list-item>
     </ul>
   </div>
 </template>
 
 <script>
+import ListItem from './list-item.vue'
+
 export default {
   data: function () {
     return {
@@ -51,7 +51,8 @@ export default {
         }
       })
     }
-  }
+  },
+  components: { ListItem }
 }
 </script>
 
