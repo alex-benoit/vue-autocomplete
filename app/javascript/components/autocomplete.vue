@@ -31,25 +31,31 @@ export default {
   },
   methods: {
     getData () {
-      const that = this;
-      Rails.ajax({
-        type: 'GET',
-        url: `https://wagon-dictionary.herokuapp.com/autocomplete/${escape(this.value)}`,
-        success: function(response){
-          if (response.words) {
-            that.results = response.words;
-            that.count = response.count;
-            that.truncated = response.truncated_result;
+      const url = `https://wagon-dictionary.herokuapp.com/autocomplete/${escape(this.value)}`
+      this.$http.get(url, {
+        before(request) {
+
+          if (this.previousRequest) {
+            this.previousRequest.abort();
+          }
+
+          this.previousRequest = request;
+        }
+      }).then(response => {
+          const data = response.data;
+
+          if (data.words) {
+            this.results = data.words;
+            this.count = data.count;
+            this.truncated = data.truncated_result;
           } else {
-            that.results = [];
+            this.results = [];
           }
           // this is needed to not trigger an immediate re-render on value change
-          that.l_value = that.value;
-        },
-        error: function(response){
-          console.log(response);
-        }
-      })
+          this.l_value = this.value;
+        }, response => {
+           console.log(response.data)
+        });
     }
   },
   components: { ListItem }

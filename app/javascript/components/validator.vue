@@ -24,23 +24,29 @@ export default {
   },
   methods: {
     getData () {
-      const that = this;
-      Rails.ajax({
-        type: 'GET',
-        url: `https://wagon-dictionary.herokuapp.com/${escape(this.value)}`,
-        success: function(response){
-          if (response.found) {
-            that.found = true;
+      const url = `https://wagon-dictionary.herokuapp.com/${escape(this.value)}`
+      this.$http.get(url, {
+        before(request) {
+
+          if (this.previousRequest) {
+            this.previousRequest.abort();
+          }
+
+          this.previousRequest = request;
+        }
+      }).then(response => {
+          const data = response.data;
+
+          if (data.found) {
+            this.found = true;
           } else {
-            that.found = false;
+            this.found = false;
           }
           // this is needed to not trigger an immediate re-render on value change
-          that.l_value = that.value;
-        },
-        error: function(response){
-          console.log(response);
-        }
-      })
+          this.l_value = this.value;
+        }, response => {
+           console.log(response.data)
+        });
     }
   }
 }
