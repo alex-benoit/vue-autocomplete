@@ -1,20 +1,15 @@
 <template>
   <div>
-    <input type="text" class="form-control" v-model="value" @keyup="getData">
+    <input type="text" class="form-control" v-model="value" v-on:keyup="getData">
     <div v-if="l_value == ''">
       <span>Start typing above...</span>
     </div>
-    <div v-else-if="results.length && truncated">
-      <span>Found {{ count }} result(s). Showing first 15 results.</span>
+    <div v-else-if="found">
+      <span>{{ l_value }} is a word!</span>
     </div>
     <div v-else>
-      <span>Found {{ count }} result(s)</span>
+      <span>{{ l_value }} is not a word...</span>
     </div>
-    <ul>
-      <li v-for="result in results">
-        {{ result }}
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -24,9 +19,7 @@ export default {
     return {
       value: '',
       l_value: '',
-      results: [],
-      count: 0,
-      truncated: false
+      found: null
     }
   },
   methods: {
@@ -34,14 +27,12 @@ export default {
       const that = this;
       Rails.ajax({
         type: 'GET',
-        url: `https://wagon-dictionary.herokuapp.com/autocomplete/${escape(this.value)}`,
+        url: `https://wagon-dictionary.herokuapp.com/${escape(this.value)}`,
         success: function(response){
-          if (response.words) {
-            that.results = response.words;
-            that.count = response.count;
-            that.truncated = response.truncated_result;
+          if (response.found) {
+            that.found = true;
           } else {
-            that.results = [];
+            that.found = false;
           }
           // this is needed to not trigger an immediate re-render on value change
           that.l_value = that.value;

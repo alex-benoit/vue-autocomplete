@@ -1,13 +1,28 @@
-<div class="container">
-  <div class="row">
-    <div class="col-12 col-md-6 mr-md-auto ml-md-auto">
-      <h1>Home</h1>
+<div id="app">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        Explanation
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <h2>Validator</h2>
 
-      <div id="autocomplete">
-        <autocomplete></autocomplete>
+        <div id="autocomplete">
+          <validator></validator>
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+        <h2>Autocomplete</h2>
+
+        <div id="autocomplete">
+          <autocomplete></autocomplete>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<%= javascript_pack_tag 'hello_vue' %>
+<%= stylesheet_pack_tag 'home' %>
+<%= javascript_pack_tag 'home' %>
