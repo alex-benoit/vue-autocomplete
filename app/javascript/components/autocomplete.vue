@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="text" class="form-control" v-model="value" @keyup="getData">
+    <input type="text" class="form-control marginized" v-model="value" @keyup="getData">
     <div v-if="l_value == ''">
       <span>Start typing above...</span>
     </div>
