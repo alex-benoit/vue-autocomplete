@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VueAutocomplete</title>
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag 'application' %>
+  </head>
+
+  <body>
+    <%= yield %>
+    <%= javascript_include_tag 'application' %>
+    <%= yield :after_js %>
+  </body>
+</html>
