@@ -32,30 +32,21 @@ export default {
   methods: {
     getData () {
       const url = `https://wagon-dictionary.herokuapp.com/autocomplete/${escape(this.value)}`
-      this.$http.get(url, {
-        before(request) {
+      this.$http.get(url).then(response => {
+        const data = response.data;
 
-          if (this.previousRequest) {
-            this.previousRequest.abort();
-          }
-
-          this.previousRequest = request;
+        if (data.words) {
+          this.results = data.words;
+          this.count = data.count;
+          this.truncated = data.truncated_result;
+        } else {
+          this.results = [];
         }
-      }).then(response => {
-          const data = response.data;
-
-          if (data.words) {
-            this.results = data.words;
-            this.count = data.count;
-            this.truncated = data.truncated_result;
-          } else {
-            this.results = [];
-          }
-          // this is needed to not trigger an immediate re-render on value change
-          this.l_value = this.value;
-        }, response => {
-           console.log(response)
-        });
+        // this is needed to not trigger an immediate re-render on value change
+        this.l_value = this.value;
+      }, response => {
+         console.log(response)
+      });
     }
   },
   components: { ListItem }

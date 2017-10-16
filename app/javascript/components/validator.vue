@@ -25,28 +25,19 @@ export default {
   methods: {
     getData () {
       const url = `https://wagon-dictionary.herokuapp.com/${escape(this.value)}`
-      this.$http.get(url, {
-        before(request) {
+      this.$http.get(url).then(response => {
+        const data = response.data;
 
-          if (this.previousRequest) {
-            this.previousRequest.abort();
-          }
-
-          this.previousRequest = request;
+        if (data.found) {
+          this.found = true;
+        } else {
+          this.found = false;
         }
-      }).then(response => {
-          const data = response.data;
-
-          if (data.found) {
-            this.found = true;
-          } else {
-            this.found = false;
-          }
-          // this is needed to not trigger an immediate re-render on value change
-          this.l_value = this.value;
-        }, response => {
-           console.log(response)
-        });
+        // this is needed to not trigger an immediate re-render on value change
+        this.l_value = this.value;
+      }, response => {
+         console.log(response)
+      });
     }
   }
 }
