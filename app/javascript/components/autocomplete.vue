@@ -11,7 +11,7 @@
       <span>Found {{ count }} result(s)</span>
     </div>
     <ul>
-      <list-item v-for="result in results" :item="result" :key="result"></list-item>
+      <list-item v-for="result in results" :item="result"></list-item>
     </ul>
   </div>
 </template>
