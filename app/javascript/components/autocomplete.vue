@@ -32,21 +32,25 @@ export default {
   methods: {
     getData () {
       const url = `https://wagon-dictionary.herokuapp.com/autocomplete/${escape(this.value)}`
-      this.$http.get(url).then(response => {
-        const data = response.data;
-
-        if (data.words) {
-          this.results = data.words;
-          this.count = data.count;
-          this.truncated = data.truncated_result;
-        } else {
-          this.results = [];
+      let that = this;
+      Rails.ajax({
+        type: "GET",
+        url,
+        success: function(response){
+          if (response.words) {
+            that.results = response.words;
+            that.count = response.count;
+            that.truncated = response.truncated_result;
+          } else {
+            that.results = [];
+          }
+          // this is needed to not trigger an immediate re-render on value change
+          that.l_value = that.value;
+        },
+        error: function(response){
+          console.log(response)
         }
-        // this is needed to not trigger an immediate re-render on value change
-        this.l_value = this.value;
-      }, response => {
-         console.log(response)
-      });
+      })
     }
   },
   components: { ListItem }

@@ -25,19 +25,23 @@ export default {
   methods: {
     getData () {
       const url = `https://wagon-dictionary.herokuapp.com/${escape(this.value)}`
-      this.$http.get(url).then(response => {
-        const data = response.data;
-
-        if (data.found) {
-          this.found = true;
-        } else {
-          this.found = false;
+      let that = this;
+      Rails.ajax({
+        type: "GET",
+        url,
+        success: function(response){
+          if (response.found) {
+            that.found = true;
+          } else {
+            that.found = false;
+          }
+          // this is needed to not trigger an immediate re-render on value change
+          that.l_value = that.value;
+        },
+        error: function(response){
+          console.log(response)
         }
-        // this is needed to not trigger an immediate re-render on value change
-        this.l_value = this.value;
-      }, response => {
-         console.log(response)
-      });
+      })
     }
   }
 }
