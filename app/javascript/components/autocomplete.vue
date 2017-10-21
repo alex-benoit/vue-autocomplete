@@ -1,7 +1,7 @@
 <template>
   <div>
-    <input type="text" class="form-control marginized" v-model="value" @keyup="getData">
-    <div v-if="l_value == ''">
+    <text-input :initVal="value" @inputChanged="getData($event)"></text-input>
+    <div v-if="value == ''">
       <span>Start typing above...</span>
     </div>
     <div v-else-if="results.length && truncated">
@@ -17,26 +17,27 @@
 </template>
 
 <script>
+import TextInput from './text-input.vue'
 import ListItem from './list-item.vue'
 
 export default {
-  data: function () {
+  data() {
     return {
       value: '',
-      l_value: '',
       results: [],
       count: 0,
       truncated: false
     }
   },
   methods: {
-    getData () {
-      const url = `https://wagon-dictionary.herokuapp.com/autocomplete/${escape(this.value)}`
+    getData(e) {
+      const url = `https://wagon-dictionary.herokuapp.com/autocomplete/${escape(e)}`
       let that = this;
       Rails.ajax({
         type: "GET",
         url,
         success: function(response){
+          that.value = e;
           if (response.words) {
             that.results = response.words;
             that.count = response.count;
@@ -44,8 +45,6 @@ export default {
           } else {
             that.results = [];
           }
-          // this is needed to not trigger an immediate re-render on value change
-          that.l_value = that.value;
         },
         error: function(response){
           console.log(response)
@@ -53,7 +52,7 @@ export default {
       })
     }
   },
-  components: { ListItem }
+  components: { ListItem, TextInput }
 }
 </script>
 
