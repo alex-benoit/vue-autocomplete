@@ -1,6 +1,6 @@
 <template>
   <div>
-    <text-input :initVal="value" @inputChanged="getData($event)"></text-input>
+    <text-input :initVal="value" @inputChanged="getData"></text-input>
     <div v-if="value == ''">
       <span>Start typing above...</span>
     </div>
